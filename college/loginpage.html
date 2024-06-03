@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .background{
+            position: absolute; 
+            height: 100%; 
+            width: 100%; 
+            background-image: url("bground1.png"); 
+            background-size: cover; 
+            background-position: center; 
+            filter: blur(2px); 
+            z-index: -1; 
+           
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff6b;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .square {
+            height: 200px;
+            width: 200px;
+            background-color: transparent;
+        }
+        .image-container {
+            position: absolute;
+            left: 40px;
+            top: 40%;
+            transform: translateY(-50%);
+        }
+
+        .image-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            position: relative;
+            animation-name: example;
+            animation-duration: 4s;
+        }
+        @keyframes example {
+  0%   {left:0px; top:0px;}
+  25%  { left:200px; top:0px;}
+  50%  { left:200px; top:200px;}
+  75%  { left:0px; top:200px;}
+  100% { left:0px; top:0px;}
+}
+
+
+        .login-container {
+            width: 350px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #073567;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            color: #0c0c0c;
+            font-size: 3.5em; /* Increased font size */
+        
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            color: #080808;
+            font-size: 2em; /* Increased font size */
+        }
+
+        @media (max-width: 800px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .image-container {
+                position: static;
+                transform: none;
+                padding-bottom: 20px;
+            }
+
+            .login-container {
+                width: 100%;
+                padding: 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .login-container {
+                width: 100%;
+                padding: 20px;
+            }
+
+            input, button {
+                width: 100%;
+            }
+        }
+    </style>
+    <title>Login Page</title>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="image-container">
+        <img src="icon.jpg" alt="Icon">
+    </div>
+    <div class="main-container">
+        <h1><marquee><a href="https://mjpru.ac.in/computer_science_information_technology.aspx">Department of CSIT, MJPRU Bareilly</a></marquee></h1>
+        <h3>File Tracking System</h3>
+        <div class="container">
+            <div class="login-container">
+                <form action="process-login.php" method="POST">
+                    <h2>Login</h2>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="&#128100; Enter your username"  name="username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="&#128274; Enter password" name="password" required>
+
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

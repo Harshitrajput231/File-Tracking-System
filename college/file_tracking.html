@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>File Tracking System</title>
+</head>
+
+<body>
+    <header>
+        <h1>File Tracking System</h1>
+    </header>
+
+    <section id="file-form">
+        <h2>Track a File</h2>
+        <form>
+            <label  for="fileNumber">File Number:</label>
+            <input type="text" id="fileNumber" name="fileNumber" required>
+
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required>
+
+            <button type="submit">Track File</button>
+        </form>
+    </section>
+
+    <section id="file-list">
+        <h2>upload file</h2>
+        <ul id="files">
+            <!-- File entries will be dynamically added here -->
+            hello
+
+        </ul>
+    </section>
+
+    <input class="fileupload" type="file" id="file" />
+    <label class="fileuploadlable" for="file">Upload File</label>
+    
+</body>
+
+</html>
