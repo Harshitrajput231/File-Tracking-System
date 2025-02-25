@@ -27,8 +27,63 @@ $_SESSION["description"] = $_POST["description"];
 		<h2>Upload a file</h2>
 		<form action="upload.php" method="POST" enctype="multipart/form-data">
 			<div class="mb-3">
-			<label for="dispatch"><b>Enter Dispatch number:</b></label>
-        			<input type="text" id="dispatch" name="dispatch" size="10" >
+			<label for="dispatch"><b>Enter File ID:</b></label>
+<input type="text" id="dispatch" name="dispatch" size="10" required onkeyup="checkFileID()">
+<p>Please note the File ID for tracking the file or you can see the file ID in the received file section.</p>
+<p id="fileIDMessage" style="color: red;"></p> <!-- Message for validation feedback -->
+
+<!-- Checkbox to allow duplicate File ID -->
+<div>
+    <input type="checkbox" id="allowDuplicate" onchange="toggleAllowDuplicate()">
+    <label for="allowDuplicate">I want to upload the file with the same ID</label>
+</div>
+<script>
+    function checkFileID() {
+        const fileID = document.getElementById('dispatch').value;
+        const message = document.getElementById('fileIDMessage');
+        const uploadButton = document.querySelector('button[type="submit"]');
+        const allowDuplicateCheckbox = document.getElementById('allowDuplicate');
+
+        // Reset the checkbox if File ID changes
+        allowDuplicateCheckbox.checked = false;
+
+        // Send AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'checkFileID.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                if (xhr.responseText === 'exists') {
+                    message.textContent = 'File ID already exists. Check the box to allow the same ID.';
+                    document.getElementById('dispatch').setCustomValidity('File ID already exists.');
+                    uploadButton.disabled = true; // Disable the upload button
+                    allowDuplicateCheckbox.disabled = false; // Enable the checkbox
+                } else {
+                    message.textContent = '';
+                    document.getElementById('dispatch').setCustomValidity('');
+                    uploadButton.disabled = false; // Enable the upload button
+                    allowDuplicateCheckbox.disabled = true; // Disable the checkbox
+                }
+            }
+        };
+        xhr.send('fileID=' + encodeURIComponent(fileID));
+    }
+
+    function toggleAllowDuplicate() {
+        const allowDuplicateCheckbox = document.getElementById('allowDuplicate');
+        const uploadButton = document.querySelector('button[type="submit"]');
+        const message = document.getElementById('fileIDMessage');
+
+        if (allowDuplicateCheckbox.checked) {
+            uploadButton.disabled = false; // Allow upload
+            document.getElementById('dispatch').setCustomValidity(''); // Clear the validation error
+            message.textContent = '';
+        } else {
+            checkFileID(); // Re-check the file ID when the checkbox is unchecked
+        }
+    }
+</script>
+
 					
 					<br>
 					<br>
@@ -38,12 +93,12 @@ $_SESSION["description"] = $_POST["description"];
                 <br>
                 <label for="whom"><b>Select to whom file is to be send </b></label>
                     <select placeholder="" id="whom" name="whom" required>
-                    <option value = "Administrator">Administrator</option>
-                    <option value = "HOD">HOD sir</option>
-                    <option value = "Professor">Professor</option>
-                    <option value = "Registrar">Registrar</option>
-                    <option value = "Junior engineer">Junior engineer</option>
-                    <option value = "Assistant engineer">Assistant Junior engineer</option>
+                    <option value = "CSIT">CSIT - Prof.Vinay Rishiwal </option>
+                    <option value = "EC">EC - Dr. S.K. TOMAR</option>
+                    <option value = "EI">EI - Prof. SANJEEV TYAGI</option>
+                    <option value = "EE">EE - Dr. D.D.SHARMA</option>
+                    <option value = "ME">ME - Dr. M.K. SINGH</option>
+                    <option value = "CH">CH - DR. KARUNA</option>
                     </select>
 					<!-- <br>
 					<br>
@@ -51,10 +106,23 @@ $_SESSION["description"] = $_POST["description"];
         			<input type="text" id="description" name="description" size="90" > -->
 					<br>
 					<br>
-					<b>Description:</b>  <br><textarea id="description" name="description" cols="30" rows="5"></textarea>
+					<b>Description:</b>  <br><textarea id="description" name="description" cols="80" rows="5"></textarea>
+                    <br>
+                    <br>
+                    <!-- New Addition: Priority field -->
+                    <label for="priority"><b>Set Priority:</b></label>
+                    <select id="priority" name="priority" class="form-control" required>
+                        <option value="High" style="color: red;">High</option>
+                        <option value="Medium" style="color: orange;">Medium</option>
+                        <option value="Low" style="color: green;" selected>Low</option>
+                    </select>
+                    <br>
+                    <!-- End of New Addition -->
+
 			</div>
-			<button onclick="location.href = 'http://localhost/college/upload.php';" type="submit" class="btn btn-primary">Upload file</button>
-            <button  onclick="location.href = 'http://localhost/college/options.php';" class="btn btn-primary">HOME</button>
+			<!-- Upload and Home buttons -->
+<button onclick="location.href = 'http://localhost/college/upload.php';" type="submit" class="btn btn-primary" disabled>Upload file</button>
+<button onclick="location.href = 'http://localhost/college/options.php';" class="btn btn-primary">HOME</button>
 		</form>
 	</div>
 
@@ -88,7 +156,7 @@ $_SESSION["description"] = $_POST["description"];
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 400px; /* Increased width for better content fit */
+    width: 800px; /* Increased width for better content fit */
     text-align: center;
 }
 

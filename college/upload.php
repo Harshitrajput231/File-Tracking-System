@@ -4,17 +4,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $database = "filelogin";
+    $database = "major";
 
     // Create a connection
     $conn = mysqli_connect($servername, $username, $password, $database);
 
     // Die if connection was not successful
     if (!$conn){
-    die("Sorry we failed to connect: ". mysqli_connect_error());
+        die("<div style='background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; margin: 10px 0;'>Sorry, we failed to connect: " . mysqli_connect_error() . "</div>");
     }
     else{
-    echo "Connection was successful<br>";
+        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>Connection was successful</div>";
     }
     session_start();
     $whom = $_POST["whom"];
@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION["whom"]=$_POST["whom"];
     $_SESSION["dispatch"]= $_POST["dispatch"];
     $usr = $_SESSION["username"];
+    $priority = $_POST["priority"];
     // echo $_SESSION["whom"];
     // echo $_SESSION["dispatch"];
     $conn->close();
@@ -63,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $db_host = "localhost";
                 $db_user = "root";
                 $db_pass = "";
-                $db_name = "filelogin";
+                $db_name = "major";
 
                 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -72,18 +73,242 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 // Insert the file information into the database
-                $sql = "INSERT INTO files (filename, filesize, filetype) VALUES ('$filename', $filesize, '$filetype');
-                        INSERT INTO `trackfile` ( `filename`, `from`, `to`,`dispatchno`,`description`) VALUES ('$filename', '$usr', '$whom','$dispatch','$description');
-                        INSERT INTO `file_movement` ( `filename`,`description`, `from`, `to`) VALUES ('$filename','$description', '$usr', '$whom');
-                        ";
 
-
-                if ($conn->multi_query($sql) === TRUE) {
-                    echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded and the information has been stored in the database.";
+                //for user CSIT
+                if ($usr == "CSIT") 
+                {
                     
-                } else {
-                    echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    $sql1 = "INSERT INTO csitsend (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    if ($conn->query($sql1) === TRUE) {
+                        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>The file <strong>" . basename($_FILES["file"]["name"]) . "</strong> has been uploaded and the information has been stored in the database.</div>";
+                    } else {
+                        echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    }
+                
+                if ($whom == "CSIT") {
+                    $sql2 = "INSERT INTO csitreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql2);
                 }
+                if ($whom == "EC") {
+                    $sql3 = "INSERT INTO ecreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql3);
+                }
+                if ($whom == "EI") {
+                    $sql4 = "INSERT INTO eireceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql4);
+                }
+                if ($whom == "EE") {
+                    $sql5 = "INSERT INTO eereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql5);
+                }
+                if ($whom == "ME") {
+                    $sql6 = "INSERT INTO mereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql6);
+                }
+                if ($whom == "CH") {
+                    $sql7 = "INSERT INTO chreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql7);
+                }
+                }
+
+                // for user EC
+                if ($usr == "EC") {
+                    
+                    $sql8 = "INSERT INTO ecsend (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    if ($conn->query($sql8) === TRUE) {
+                        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>The file <strong>" . basename($_FILES["file"]["name"]) . "</strong> has been uploaded and the information has been stored in the database.</div>";
+                    } else {
+                        echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    }
+                
+                if ($whom == "CSIT") {
+                    $sql9 = "INSERT INTO csitreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql9);
+                }
+                if ($whom == "EC") {
+                    $sql10 = "INSERT INTO ecreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql10);
+                }
+                if ($whom == "EI") {
+                    $sql11 = "INSERT INTO eireceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql11);
+                }
+                if ($whom == "EE") {
+                    $sql12 = "INSERT INTO eereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql12);
+                }
+                if ($whom == "ME") {
+                    $sql13 = "INSERT INTO mereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql13);
+                }
+                if ($whom == "CH") {
+                    $sql14 = "INSERT INTO chreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql14);
+                }
+            }
+                // for user EI
+                if ($usr == "EI") {
+                    
+                    $sql15 = "INSERT INTO eisend (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    if ($conn->query($sql15) === TRUE) {
+                        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>The file <strong>" . basename($_FILES["file"]["name"]) . "</strong> has been uploaded and the information has been stored in the database.</div>";
+                    } else {
+                        echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    }
+                
+                if ($whom == "CSIT") {
+                    $sql16 = "INSERT INTO csitreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql16);
+                }
+                if ($whom == "EC") {
+                    $sql17 = "INSERT INTO ecreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql17);
+                }
+                if ($whom == "EI") {
+                    $sql18 = "INSERT INTO eireceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql18);
+                }
+                if ($whom == "EE") {
+                    $sql19 = "INSERT INTO eereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql19);
+                }
+                if ($whom == "ME") {
+                    $sql20 = "INSERT INTO mereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql20);
+                }
+                if ($whom == "CH") {
+                    $sql21 = "INSERT INTO chreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql21);
+                }
+            }
+                // for user EE
+                if ($usr == "EE") {
+                    
+                    $sql22 = "INSERT INTO eesend (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    if ($conn->query($sql22) === TRUE) {
+                        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>The file <strong>" . basename($_FILES["file"]["name"]) . "</strong> has been uploaded and the information has been stored in the database.</div>";
+                    } else {
+                        echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    }
+                
+                if ($whom == "CSIT") {
+                    $sql23 = "INSERT INTO csitreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql23);
+                }
+                if ($whom == "EC") {
+                    $sql24 = "INSERT INTO ecreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql24);
+                }
+                if ($whom == "EI") {
+                    $sql25 = "INSERT INTO eireceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql25);
+                }
+                if ($whom == "EE") {
+                    $sql26 = "INSERT INTO eereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql26);
+                }
+                if ($whom == "ME") {
+                    $sql27 = "INSERT INTO mereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql27);
+                }
+                if ($whom == "CH") {
+                    $sql28 = "INSERT INTO chreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql28);
+                }
+            }
+                // for user ME
+                if ($usr == "ME") {
+                    
+                    $sql29 = "INSERT INTO mesend (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    if ($conn->query($sql29) === TRUE) {
+                        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>The file <strong>" . basename($_FILES["file"]["name"]) . "</strong> has been uploaded and the information has been stored in the database.</div>";
+                    } else {
+                        echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    }
+                
+                if ($whom == "CSIT") {
+                    $sql30 = "INSERT INTO csitreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql30);
+                }
+                if ($whom == "EC") {
+                    $sql31 = "INSERT INTO ecreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql31);
+                }
+                if ($whom == "EI") {
+                    $sql32 = "INSERT INTO eireceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql32);
+                }
+                if ($whom == "EE") {
+                    $sql33 = "INSERT INTO eereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql33);
+                }
+                if ($whom == "ME") {
+                    $sql34 = "INSERT INTO mereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql34);
+                }
+                if ($whom == "CH") {
+                    $sql35 = "INSERT INTO chreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql35);
+                }
+            }
+                // for user CH
+                if ($usr == "CH") {
+                    
+                    $sql36 = "INSERT INTO chsend (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    if ($conn->query($sql36) === TRUE) {
+                        echo "<div style='background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin: 10px 0;'>The file <strong>" . basename($_FILES["file"]["name"]) . "</strong> has been uploaded and the information has been stored in the database.</div>";
+                    } else {
+                        echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                    }
+                
+                if ($whom == "CSIT") {
+                    $sql37 = "INSERT INTO csitreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql37);
+                }
+                if ($whom == "EC") {
+                    $sql38 = "INSERT INTO ecreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql38);
+                }
+                if ($whom == "EI") {
+                    $sql39 = "INSERT INTO eireceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql39);
+                }
+                if ($whom == "EE") {
+                    $sql40 = "INSERT INTO eereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql40);
+                }
+                if ($whom == "ME") {
+                    $sql41 = "INSERT INTO mereceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql41);
+                }
+                if ($whom == "CH") {
+                    $sql42 = "INSERT INTO chreceive (`filename`, filesize, filetype,`description`,`from`,`to`,fileID,`priority`) VALUES ('$filename', $filesize, '$filetype','$description','$usr','$whom','$dispatch','$priority');";
+                    $conn->query($sql42);
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+                        //INSERT INTO `trackfile` ( `filename`, `from`, `to`,`dispatchno`,`description`) VALUES ('$filename', '$usr', '$whom','$dispatch','$description');
+                        //INSERT INTO `file_movement` ( `filename`,`description`, `from`, `to`) VALUES ('$filename','$description', '$usr', '$whom');
+                        //";
+
+                //                if ($conn->multi_query($sql) === TRUE) {
+
+                // if ($conn->query($sql1) === TRUE) {
+                //     echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded and the information has been stored in the database.";
+                // } else {
+                //     echo "Sorry, there was an error uploading your file and storing information in the database: " . $conn->error;
+                // }
+                
 
                 $conn->close();
             } else {

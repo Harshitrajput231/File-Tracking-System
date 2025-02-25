@@ -55,7 +55,7 @@ $un=$_SESSION["username"];
         <button  onclick="location.href = 'http://localhost/college/sendfile.php';" >SEND FILE</button>
         <button onclick="location.href = 'http://localhost/college/receive.php';" >RECEIVE FILE</button>
         <button onclick="location.href = 'http://localhost/college/trackfile.php';">TRACK FILE</button>
-        <button onclick="location.href = 'http://localhost/college/chain.php';">TRACK FILE CHAIN</button>
+        <button onclick="location.href = 'http://localhost/college/fileID.php';">TRACK FILE CHAIN</button>
     </div>
 </body>
 </html>
